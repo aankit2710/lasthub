@@ -22,8 +22,7 @@ const articleSchema = new Schema({
         type: String
     },
     createdBy:{
-        type: Schema.Types.ObjectId,
-        ref: 'user'
+        type: String
     },
     createdAt:{
         type: Date,
