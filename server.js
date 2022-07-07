@@ -47,10 +47,10 @@ app.use((error, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const MONGO_URL = 'mongodb+srv://minion1708:Tinkerbell170413@cluster0.zcowk.mongodb.net/?retryWrites=true&w=majority';
 
 mongoose
-  .connect(process.env.MONGO_URL, {
+  .connect(MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -63,8 +63,8 @@ mongoose
   /** Create HTTP server. */
   const server = http.createServer(app);
 
-  server.listen(PORT, () => {
-    console.log(`Server is Running at port ${PORT}`);
+  server.listen(2710, () => {
+    console.log(`Server is Running at port 2710`);
   });
   })
   .catch((err) => {

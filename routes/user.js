@@ -21,7 +21,7 @@ const {
 //USER REGISTER
 router.post("/register", userRegister);
 
-// USER LOGIN
+// USER LOGIN 
 router.post("/login", userLogin);
 
 module.exports = router;
