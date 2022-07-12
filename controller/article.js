@@ -43,8 +43,7 @@ module.exports = {
     },
     getArticles: async (req, res, next) => {
         try {
-          const {id} = req.user
-          const articles = await Article.find({createdBy:id})
+          const articles = await Article.find({})
           return res.status(200).json({success:true, message:`${articles.length} articles found`, response: articles})
         }
         catch (error) {
