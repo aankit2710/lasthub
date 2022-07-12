@@ -123,7 +123,8 @@ module.exports = {
   getUsers: async (req, res, next) => {
     try {
       const queryObject = url.parse(req.url, true).query;
-      const user = await User.find(queryObject, {password:0, otp:0});
+      console.log(queryObject);
+      const user = await User.find(queryObject, {password:0});
       if (!user) {
         return res
           .status(404)
