@@ -1,3 +1,4 @@
+const url = require('url');
 const Order = require('../model/order')
 
 module.exports = {
@@ -89,7 +90,10 @@ module.exports = {
     },
     getOrders: async (req, res, next) => {
         try {
-          const orders = await Order.find({})
+            const queryObject = url.parse(req.url, true).query;
+            console.log(queryObject);
+            const orders = await Order.find(queryObject)
+
           return res.status(200).json({success:true, message:`${orders.length} orders found`, response: orders})
         }
         catch (error) {
