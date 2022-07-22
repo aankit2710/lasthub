@@ -55,6 +55,38 @@ module.exports = {
             return res.status(500).json({ success: false, message: "Internal Server Error", error: error.message })
         }
     },
+    updateOrder: async (req, res, next) => {
+        try {
+            const {id} = req.params;
+            const {
+                delivery_date,
+                pincode,
+                customer_area,
+                reason
+            } = req.body;
+            const order = await Order.findById(id)
+            if (! order){
+                return res.status(404).json({success:false, message:"Invalid id, Order not found", response:{}})
+            }
+            if (delivery_date) {
+                order.delivery_date = delivery_date;
+              }
+              if (pincode) {
+                order.pincode = pincode;
+              }
+              if (customer_area) {
+                order.customer_area = customer_area;
+              }
+              if (reason) {
+                order.reason = reason;
+              }
+              await order.save();
+            return res.status(200).json({success:true, message:"Order found", response:order})
+        }
+        catch (error) {
+            return res.status(500).json({ success: false, message: "Internal Server Error", error: error.message })
+        }
+    },
     getOrders: async (req, res, next) => {
         try {
           const orders = await Order.find({})
