@@ -12,7 +12,6 @@ const keys = require("../config/keys");
 module.exports = {
   userRegister: async (req, res, next) => {
     try {
-      let errors = {};
       const {
         name,
         email,
@@ -29,8 +28,7 @@ module.exports = {
 
       const user = await User.findOne({ email });
       if (user) {
-        errors.email = "Email already exist";
-        return res.status(400).json(errors);
+        return res.status(400).json({message: "Email already exist"});
       }
 
       let hashedPassword;
@@ -66,17 +64,14 @@ module.exports = {
   },
   userLogin: async (req, res, next) => {
     try {
-      let errors = {};
       const { email, password } = req.body;
       const user = await User.findOne({ email });
       if (!user) {
-        errors.email = "Email doesnt not exist";
-        return res.status(400).json(errors);
+        return res.status(400).json({message:"Email doesnt not exist"})
       }
       const isCorrect = await bcrypt.compare(password, user.password);
       if (!isCorrect) {
-        errors.password = "Invalid Credentials";
-        return res.status(404).json(errors);
+        return res.status(400).json({message:"Invalid Credentials"})
       }
       const payload = {
         email,
@@ -99,13 +94,12 @@ module.exports = {
       const {id} = req.user
       const { password } = req.body;
       if(!password){
-        errors.password = "Password is required";
-        return res.status(400).json(errors);
+        return res.status(400).json({message: `Password is required`});
       }
       const user = await User.findById(ObjectId(id));
       if (!user) {
         errors.id = "User not Found";
-        return res.status(400).json(errors);
+        return res.status(400).json({message: "User not Found"});
       
       }
       const hashedPassword = await bcrypt.hash(password, 8);

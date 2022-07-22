@@ -28,6 +28,7 @@ app.get("/", (req, res) => {
 
 //ROUTES
 app.use("/dev/api/v1/user", require("./routes/user"));
+app.use("/dev/api/v1/order", require("./routes/order"));
 app.use("/dev/api/v1/article", require("./routes/article"));
 
 //Catching 404 Error
