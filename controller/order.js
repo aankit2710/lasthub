@@ -46,7 +46,7 @@ module.exports = {
     getOrder: async (req, res, next) => {
         try {
             const {id} = req.params
-            const order = await Order.findById(id)
+            const order = await Order.findById(id).populate("delivery_boy",{'name':1})
             if (! order){
                 return res.status(404).json({success:false, message:"Invalid id, Order not found", response:{}})
             }
@@ -92,7 +92,7 @@ module.exports = {
         try {
             const queryObject = url.parse(req.url, true).query;
             console.log(queryObject);
-            const orders = await Order.find(queryObject)
+            const orders = await Order.find(queryObject).populate("delivery_boy",{'name':1})
 
           return res.status(200).json({success:true, message:`${orders.length} orders found`, response: orders})
         }
