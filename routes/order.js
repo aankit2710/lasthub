@@ -12,7 +12,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), createOrder)
 router.get('/:id',passport.authenticate('jwt', { session: false }), getOrder)
 
 //UPDATE ORDER
-router.get('/:id',passport.authenticate('jwt', { session: false }), updateOrder)
+router.put('/:id',passport.authenticate('jwt', { session: false }), updateOrder)
 
 //GET ORDERS
 router.get('/',passport.authenticate('jwt', { session: false }), getOrders)
