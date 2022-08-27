@@ -29,7 +29,7 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["User", "Admin", "Seller"],
+    enum: ["User", "Admin", "SalesExecutive", "HubManager"],
     default: "User",
   },
   city: {

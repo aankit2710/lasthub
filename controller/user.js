@@ -23,7 +23,8 @@ module.exports = {
         zone,
         area,
         latitude,
-        longitude
+        longitude,
+        role
       } = req.body;
 
       const user = await User.findOne({ email });
@@ -43,9 +44,10 @@ module.exports = {
         city,
         pincode,
         zone,
-        area,
+        area: area || '',
         latitude,
-        longitude
+        longitude,
+        role
       });
       await newUser.save();
 
@@ -117,8 +119,44 @@ module.exports = {
   getUsers: async (req, res, next) => {
     try {
       const queryObject = url.parse(req.url, true).query;
-      console.log(queryObject);
-      const user = await User.find(queryObject, {password:0});
+      let query = {};
+
+      if (queryObject.name && !queryObject.key) {
+        query = {
+          ...query,
+          name : { $regex: `${queryObject.name}.*`, $options: "i" }
+        }
+      }
+      if (queryObject.email && !queryObject.key) {
+        query = {
+          ...query,
+          email : { $regex: `${queryObject.email}.*`, $options: "i" }
+        }
+      }
+      if (queryObject.pincode && !queryObject.key) {
+        query = {
+          ...query,
+          pincode : { $regex: `${queryObject.pincode}.*`, $options: "i" }
+        }
+      }
+      if (queryObject.area && !queryObject.key) {
+        query = {
+          ...query,
+          area : { $regex: `${queryObject.area}.*`, $options: "i" }
+        }
+      }
+      if(queryObject.key) {
+        query = {
+          $or:[
+          {name : { $regex: `${queryObject.key}.*`, $options: "i" }},
+          {email : { $regex: `${queryObject.key}.*`, $options: "i" }},
+          {pincode : { $regex: `${queryObject.key}.*`, $options: "i" }},
+          {area : { $regex: `${queryObject.key}.*`, $options: "i" }}
+        ]}
+      }
+
+      const user = await User.find(query, {password:0}).sort({  createdAt: -1 }
+    );
       if (!user) {
         return res
           .status(404)

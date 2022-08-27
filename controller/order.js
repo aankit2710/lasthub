@@ -92,7 +92,27 @@ module.exports = {
         try {
             const queryObject = url.parse(req.url, true).query;
             console.log(queryObject);
-            const orders = await Order.find(queryObject).populate("delivery_boy",{'name':1})
+            let query = {};
+            if (queryObject.pincode && !queryObject.key) {
+                query = {
+                ...query,
+                pincode : { $regex: `${queryObject.pincode}.*`, $options: "i" }
+                }
+            }
+            if (queryObject.area && !queryObject.key) {
+                query = {
+                ...query,
+                customer_area : { $regex: `${queryObject.area}.*`, $options: "i" }
+                }
+            }
+            if(queryObject.key) {
+                query = {
+                $or:[
+                {pincode : { $regex: `${queryObject.key}.*`, $options: "i" }},
+                {customer_area : { $regex: `${queryObject.key}.*`, $options: "i" }}
+                ]}
+            }
+            const orders = await Order.find(query).populate("delivery_boy",{'name':1})
 
           return res.status(200).json({success:true, message:`${orders.length} orders found`, response: orders})
         }
